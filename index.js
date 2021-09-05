@@ -75,7 +75,7 @@ app.delete('/api/persons/:id', (request, response) => {
 })
 
 // 向服务端写入数据
-app.post('/api/persons', (request, response) => {
+app.post('/api/persons', (request, response, next) => {
   //为新添加的联系人创建ID
   const sendPerson = request.body
   const newContact = new Phone({
@@ -98,7 +98,7 @@ app.post('/api/persons', (request, response) => {
 const errorHandler = (error, request, response, next) => {
   console.error(error.message)
 
-  if (error.name === 'CastError' && error.kind === 'ObjectId') {
+  if (error.name === 'CastError') {
     return response.status(400).send({ error: 'malformatted id' })
   }else if(error.name === 'ValidationError'){
     return response.status(400).json({error: error.message})

@@ -1,5 +1,6 @@
 // 本文件用于存储Mongoose中特定的代码
 const mongoose = require('mongoose')
+const uniqueValidator = require('mongoose-unique-validator')
 const url = process.env.MONGODB_URI
 console.log('connecting to', url)
 
@@ -12,7 +13,7 @@ mongoose.connect(url).then(result => {
 
 // 定义电话簿中存储数据的模式
 const phoneSchema = new mongoose.Schema({
-    name: String,
+    name: {type: String, unique:true},
     number: String,
 })
 
@@ -24,5 +25,5 @@ phoneSchema.set('toJSON', {
       delete returnedObject.__v
     }
 })
-
+phoneSchema.plugin(uniqueValidator, { message: '{VALUE} is already on the list.' })
 module.exports = mongoose.model('Phone', phoneSchema)
