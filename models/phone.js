@@ -13,8 +13,8 @@ mongoose.connect(url).then(result => {
 
 // 定义电话簿中存储数据的模式
 const phoneSchema = new mongoose.Schema({
-    name: {type: String, unique:true},
-    number: String,
+    name: {type: String, minlength: 3,required: true,unique:true},
+    number: {type:String, minlength:8, required:true},
 })
 
 // 对Schema的toJSON方法进行修改，从而去除掉获取到的数据的__id字段和__v字段
