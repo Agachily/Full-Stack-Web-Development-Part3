@@ -42,7 +42,7 @@ if(process.argv.length > 3){
     Phone.find({}).then(result => {
         console.log(`phonebook:`)
         result.forEach(value => {
-            console.log(`${value.name} ${value.number}`)
+            console.log(`${value.name} ${value.number} ${value.id} sad`)
         })
         mongoose.connection.close()
     })

@@ -1,13 +1,22 @@
-DELETE http://localhost:3001/api/persons/4
+DELETE http://localhost:3001/api/persons/6134aff28b9ec53cab392f00
 ###
-GET http://localhost:3001/api/persons
+GET http://localhost:3001/info
 ###
-GET http://localhost:3001/api/persons/2
+GET http://localhost:3001/api/persons/6133ba7d9dfc6e2571fb292b
 ### 
 POST http://localhost:3001/api/persons
 Content-Type: application/json
 
 {
-    "name": "qwqweqw",
+    "name": "Qin Qiong",
     "number": "12-213213123"
+}
+
+### 
+PUT http://localhost:3001/api/persons/6133ba7d9dfc6e2571fb292b
+Content-Type: application/json
+
+{
+    "name": "Bai Qiuling",
+    "number": "23-0129328126712"
 }
