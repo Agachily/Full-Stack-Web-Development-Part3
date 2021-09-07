@@ -2,7 +2,6 @@
 require('dotenv').config()
 
 // 导入express
-const { response } = require('express')
 const express = require('express')
 const morgan = require('morgan')
 const cors = require('cors')
@@ -11,7 +10,6 @@ const cors = require('cors')
 const app = express()
 // 定义用于创建电话簿的构造函数
 const Phone = require('./models/phone')
-const { connection } = require('mongoose')
 
 // 创建morgan token
 morgan.token('body', function (req) {return JSON.stringify(req.body)})
@@ -23,19 +21,16 @@ app.use(express.static('build'))
 app.use(cors())
 
 // 响应浏览器请求，并返回电话簿数据
-app.get('/api/persons', (repuest, response, next) => {
-   Phone.find({}).then(result => {
-     response.json(result)
-   })
+app.get('/api/persons', (repuest, response) => {
+  Phone.find({}).then(result => {
+    response.json(result)
+  })
 })
 
 // 返回电话簿中的整体数据
 app.get('/info', (request,response) => {
   Phone.find().then(persons => {
-    const result = `
-                <p>Phonebook has info for ${persons.length} people</p>
-                <p>${new Date()}</p>
-            `
+    const result = `<p>Phonebook has info for ${persons.length} people</p> <p>${new Date()}</p>`
     response.send(result)
   })
 })
@@ -48,13 +43,12 @@ app.get('/api/persons/:id',(request, response, next) => {
     }else{
       response.status(404).end()
     }
-  }).catch(error => {error => next(error)})
+  }).catch(error => next(error))
 })
 
 // 对某一联系人的信息进行更新
 app.put('/api/persons/:id', (request, response, next) => {
   const sendPerson = request.body
-
   const contact = {
     name: sendPerson.name,
     number: sendPerson.number,
@@ -68,10 +62,10 @@ app.put('/api/persons/:id', (request, response, next) => {
 })
 
 // 删除某个联系人的信息
-app.delete('/api/persons/:id', (request, response) => {
-  Phone.findByIdAndRemove(request.params.id).then(result => {
+app.delete('/api/persons/:id', (request, response, next) => {
+  Phone.findByIdAndRemove(request.params.id).then(
     response.status(204).end()
-  }).catch(error => next(error))
+  ).catch(error => next(error))
 })
 
 // 向服务端写入数据
@@ -112,5 +106,5 @@ app.use(errorHandler)
 // 在3001端口对浏览器的请求进行监听
 const PORT = process.env.PORT
 app.listen(PORT,() => {
-    console.log(`Server running on port ${PORT}`)
+  console.log(`Server running on port ${PORT}`)
 })
